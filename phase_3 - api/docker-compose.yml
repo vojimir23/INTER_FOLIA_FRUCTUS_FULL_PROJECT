@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  api:
+    image: blludnisin23/era-iff-api:latest
+    ports:
+      - "9001:8000"
+    networks:
+      - faithnet
+    environment:
+      - MONGO_URI=mongodb://db:27017/
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - db
+    volumes:
+      - images-storage:/app/images
+
+  db:
+    image: blludnisin23/era-iff-db:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - faithnet
+
+  image-manager:
+    image: filebrowser/filebrowser:latest
+    user: root   # <--- THIS IS THE FIX. It gives permission to write files.
+    ports:
+      - "8080:80"
+    volumes:
+      - images-storage:/srv
+      - filebrowser-config:/database
+    networks:
+      - faithnet
+
+networks:
+  faithnet:
+    driver: overlay
+
+volumes:
+  mongo-data:
+  images-storage:
+  filebrowser-config:

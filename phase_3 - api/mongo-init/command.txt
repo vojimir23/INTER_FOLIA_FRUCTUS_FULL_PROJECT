@@ -1,0 +1,5 @@
+& "C:\mongodb-database-tools-windows-x86_64-100.13.0\bin\mongodump.exe" `
+  --host localhost `
+  --port 27017 `
+  --db FaithInterFolia `
+  --out "C:\Users\vojim\Desktop\opt api db\database"
